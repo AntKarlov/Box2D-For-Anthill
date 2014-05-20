@@ -71,6 +71,10 @@
 	// Физ.тело унаследовано от AntActor, поэтому вы можете работать с ним как с актером.
 	body.addAnimationFromCache("MyGreatCachedClipName");
 	
+	// Так же, после создания физ.тела, не забываем его
+	// добавить в наш визуальный мир.
+	myEntity.add(body);
+	
 Создание соеденения:
 
 	var joint:AntBox2DRevoluteJoint = new AntBox2DRevoluteJoint();
