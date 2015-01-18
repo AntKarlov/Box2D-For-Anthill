@@ -34,12 +34,6 @@ package ru.antkarlov.anthill.plugins.box2d.shapes
 		 */
 		protected var _height:Number;
 		
-		/**
-		 * Угол поворота прямоугольника в радианах.
-		 * @default    0
-		 */
-		protected var _angle:Number;
-		
 		//---------------------------------------
 		// CONSTRUCTOR
 		//---------------------------------------
@@ -149,28 +143,6 @@ package ru.antkarlov.anthill.plugins.box2d.shapes
 				_height = aValue;
 				updateShapes();
 			}
-		}
-		
-		/**
-		 * Определяет угол поворота прямоугольника в радианах.
-		 */
-		public function get angle():Number { return _angle; }
-		public function set angle(aValue:Number):void
-		{
-			if (_angle != aValue)
-			{
-				_angle = aValue;
-				updateShapes();
-			}
-		}
-		
-		/**
-		 * Определяет угол поворота прямоугольника в градусах.
-		 */
-		public function get angleDeg():Number { return AntMath.toDegrees(_angle); }
-		public function set angleDeg(aValue:Number):void
-		{
-			_angle = AntMath.toRadians(aValue);
 		}
 		
 	}
