@@ -1,6 +1,7 @@
 package ru.antkarlov.anthill.plugins.box2d.joints
 {
 	import ru.antkarlov.anthill.*;
+	import ru.antkarlov.anthill.signals.AntSignal;
 	import ru.antkarlov.anthill.debug.AntDrawer;
 	import ru.antkarlov.anthill.plugins.box2d.*;
 	
@@ -20,6 +21,8 @@ package ru.antkarlov.anthill.plugins.box2d.joints
 	 */
 	public class AntBox2DRevoluteJoint extends AntBox2DBasicJoint
 	{
+		public var eventJointBreaks:AntSignal;
+		
 		//---------------------------------------
 		// PROTECTED VARIABLES
 		//---------------------------------------
@@ -59,6 +62,8 @@ package ru.antkarlov.anthill.plugins.box2d.joints
 		public function AntBox2DRevoluteJoint(aManager:AntBox2DManager = null)
 		{
 			super(aManager);
+			
+			eventJointBreaks = new AntSignal(AntBox2DRevoluteJoint);
 			
 			_jointDef = new b2RevoluteJointDef();
 			_joint = null;
@@ -248,6 +253,7 @@ package ru.antkarlov.anthill.plugins.box2d.joints
 				ab.jointBreaks(this);
 			}
 			
+			eventJointBreaks.dispatch(this);
 			kill();
 		}
 		 
