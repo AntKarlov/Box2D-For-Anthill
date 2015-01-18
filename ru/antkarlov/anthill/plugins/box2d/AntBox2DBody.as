@@ -1,6 +1,7 @@
 package ru.antkarlov.anthill.plugins.box2d
 {
 	import ru.antkarlov.anthill.*;
+	import ru.antkarlov.anthill.signals.AntSignal;
 	import ru.antkarlov.anthill.plugins.box2d.shapes.*;
 	import ru.antkarlov.anthill.plugins.box2d.joints.*;
 	
@@ -34,6 +35,13 @@ package ru.antkarlov.anthill.plugins.box2d
 		 * @default    null
 		 */
 		public var manager:AntBox2DManager;
+		
+		public var eventPreSolveContact:AntSignal;
+		public var eventBeginContact:AntSignal;
+		public var eventEndContact:AntSignal;
+		public var eventPostSolveContact:AntSignal;
+		public var eventJointBreaks:AntSignal;
+		public var eventExplode:AntSignal;
 		
 		public var allowPreSolveContacts:Boolean;
 		public var allowPostSolveContacts:Boolean;
@@ -138,6 +146,13 @@ package ru.antkarlov.anthill.plugins.box2d
 			_canRotate = true;
 			_canSleep = true;
 			
+			eventPreSolveContact = new AntSignal(AntBox2DBody, AntBox2DContact);
+			eventBeginContact = new AntSignal(AntBox2DBody, AntBox2DContact);
+			eventEndContact = new AntSignal(AntBox2DBody, AntBox2DContact);
+			eventPostSolveContact = new AntSignal(AntBox2DBody, AntBox2DContact);
+			eventJointBreaks = new AntSignal(AntBox2DBody, AntBox2DBasicJoint);
+			eventExplode = new AntSignal(AntBox2DBody, AntBox2DBody, AntPoint, AntPoint, Number);
+			
 			allowPreSolveContacts = false;
 			allowPostSolveContacts = false;
 			allowBeginContacts = true;
@@ -234,6 +249,8 @@ package ru.antkarlov.anthill.plugins.box2d
 				этого метода классом AntBox2DContactListener, установите флаг тела 
 				allowPreSolveContact равным TRUE.
 			*/
+			
+			eventPreSolveContact.dispatch(this, aContact);
 		}
 		
 		/**
@@ -251,6 +268,8 @@ package ru.antkarlov.anthill.plugins.box2d
 				указатель на aContact, так как информация в нем будет обнулена сразу же 
 				после вызова этого метода. Скопируйте данные контакта чтобы их сохранить.
 			*/
+				
+			eventBeginContact.dispatch(this, aContact);
 		}
 		
 		/**
@@ -266,6 +285,8 @@ package ru.antkarlov.anthill.plugins.box2d
 				указатель на aContact, так как информация в нем будет обнулена сразу же 
 				после вызова этого метода. Скопируйте данные контакта чтобы их сохранить.
 			*/
+				
+			eventEndContact.dispatch(this, aContact);
 		}
 		
 		/**
@@ -291,6 +312,8 @@ package ru.antkarlov.anthill.plugins.box2d
 				этого метода классом AntBox2DContactListener, установите флаг тела 
 				allowPostSolveContact равным TRUE.
 			*/
+			
+			eventPostSolveContact.dispatch(this, aContact);
 		}
 		
 		/**
@@ -304,6 +327,8 @@ package ru.antkarlov.anthill.plugins.box2d
 				Перекройте этот метод в потомке этого класса чтобы получать
 				информацию о рвущихся соеденениях от перегрузки или ручном разрыве.
 			*/
+			
+			eventJointBreaks.dispatch(this, aJoint);
 		}
 		
 		/**
@@ -321,6 +346,7 @@ package ru.antkarlov.anthill.plugins.box2d
 			*/
 			
 			applyImpulse(aForce.x, aForce.y, aPoint.x, aPoint.y);
+			eventExplode.dispatch(this, aSource, aForce, aPoint, aDamage);
 		}
 		
 		/**
@@ -617,6 +643,19 @@ package ru.antkarlov.anthill.plugins.box2d
 				_box2dPosition.x = aX / manager.scale;
 				_box2dPosition.y = aY / manager.scale;
 				box2dBody.SetPosition(_box2dPosition);
+			}
+		}
+		
+		/**
+		 * @private
+		 */
+		public function applyAngle(aAngle:Number):void
+		{
+			angle = aAngle;
+			
+			if (box2dBody != null)
+			{
+				box2dBody.SetAngle(AntMath.toRadians(aAngle));
 			}
 		}
 		
