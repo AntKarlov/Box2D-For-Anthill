@@ -40,9 +40,7 @@ package ru.antkarlov.anthill.plugins.box2d
 			}
 			
 			_instance = this;
-			_numFlags = 0;
-			_flagList = new Dictionary();
-			_bitList = [];
+			reset();
 		}
 		
 		/**
@@ -56,6 +54,16 @@ package ru.antkarlov.anthill.plugins.box2d
 		//---------------------------------------
 		// PUBLIC METHODS
 		//---------------------------------------
+		
+		/**
+		 * @private
+		 */
+		public function reset():void
+		{
+			_numFlags = 0;
+			_flagList = new Dictionary();
+			_bitList = [];
+		}
 		
 		/**
 		 * Возвращает значение флага по его имени. Добавляемый флаг будет автоматически
@@ -142,7 +150,7 @@ package ru.antkarlov.anthill.plugins.box2d
 		 */
 		public function flagsOverlap(aFlagA:AntBox2DFlag, aFlagB:AntBox2DFlag):Boolean
 		{
-			if (aFlagA == null || aFlagB == null)
+			if (!aFlagA || !aFlagB)
 			{
 				return false;
 			}
@@ -160,14 +168,12 @@ package ru.antkarlov.anthill.plugins.box2d
 		{
 			if (getFlagName(aBitIndex) != null)
 			{
-				AntG.log("Warning: Bit already registerd in AntBox2DFlagManager.", "error");
-				return;
+				throw new Error("(AntBox2DFlagManager): Bit already registerd in AntBox2DFlagManager.");
 			}
 			
 			if (_flagList[aFlagName])
 			{
-				AntG.log("Warning: Name already assigned to another bit in AntBox2DFlagManager.", "error");
-				return;
+				throw new Error("(AntBox2DFlagManager): Name already assigned to another bit in AntBox2DFlagManager.");
 			}
 			
 			if (aBitIndex >= _numFlags)
