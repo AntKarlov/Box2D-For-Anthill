@@ -158,7 +158,7 @@ package ru.antkarlov.anthill.plugins.box2d.models
 		/**
 		 * @private
 		 */
-		public function getAllShapes(aResult:Vector.<AntBox2DBasicShape> = null):Vector.<AntBox2DBasicShape>
+		public function getAllShapes(aResult:Vector.<AntBox2DBasicShape> = null, aClone:Boolean = true):Vector.<AntBox2DBasicShape>
 		{
 			if (aResult == null)
 			{
@@ -168,7 +168,7 @@ package ru.antkarlov.anthill.plugins.box2d.models
 			var i:int = 0;
 			while (i < _numShapes)
 			{
-				aResult.push(getShape(i++));
+				aResult.push(getShape(i++, aClone));
 			}
 			
 			return aResult;
